@@ -56,9 +56,11 @@ class BaseCamera(object):
     frame = None  # current frame is stored here by background thread
     last_access = 0  # time of last client access to the camera
     event = CameraEvent()
+    _leds = None   
 
-    def __init__(self):
+    def __init__(self, leds):
         """Start the background camera thread if it isn't running yet."""
+        BaseCamera._leds = leds
         if BaseCamera.thread is None:
             BaseCamera.last_access = time.time()
 
@@ -70,8 +72,10 @@ class BaseCamera(object):
             while self.get_frame() is None:
                 time.sleep(0)
 
-    def get_frame(self):
+    def get_frame(self, snapshot = False):
         """Return the current camera frame."""
+        if BaseCamera.thread is None:
+            self.__init__(self._leds)
         BaseCamera.last_access = time.time()
 
         # wait for a signal from the camera thread
@@ -82,6 +86,11 @@ class BaseCamera(object):
 
     @staticmethod
     def frames():
+        """"Generator that returns frames from the camera."""
+        raise RuntimeError('Must be implemented by subclasses.')
+
+    @staticmethod
+    def single_frame():
         """"Generator that returns frames from the camera."""
         raise RuntimeError('Must be implemented by subclasses.')
 
@@ -100,5 +109,8 @@ class BaseCamera(object):
             if time.time() - BaseCamera.last_access > 10:
                 frames_iterator.close()
                 print('Stopping camera thread due to inactivity.')
+                if(cls._leds.leds_on()):
+                    cls._leds.switch_leds(False)
+
                 break
         BaseCamera.thread = None
