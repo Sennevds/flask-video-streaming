@@ -1,4 +1,12 @@
-flask-video-streaming
-=====================
+# Video stream with flask and trigger GPIO when someone watching
+================================================================
+Based on the following tutorial [video streaming with Flask](http://blog.miguelgrinberg.com/post/video-streaming-with-flask) A python script to stream a webcam and activate a GPIO pin when this stream is watched.
 
-Supporting code for my article [video streaming with Flask](http://blog.miguelgrinberg.com/post/video-streaming-with-flask) and its follow-up [Flask Video Streaming Revisited](http://blog.miguelgrinberg.com/post/flask-video-streaming-revisited).
+# How to use
+
+Start the flask app with following params:
+FLASK_APP=path-to/app.py CAMERA=opencv flask run
+The camera variable can be:
+- opencv
+- v4l2
+- pi
