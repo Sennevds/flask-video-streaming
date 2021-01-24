@@ -6,7 +6,9 @@ Based on the following tutorial [video streaming with Flask](http://blog.miguelg
 # How to use
 
 Start the flask app with following params:
+```sh
 FLASK_APP=path-to/app.py CAMERA=opencv flask run
+```
 The camera variable can be:
 - opencv
 - v4l2
